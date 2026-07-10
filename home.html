@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Favorite Person 😍</title>
+    <style>
+        :root {
+            --bg-color: #faf6f6;
+            --card-bg: #ffffff;
+            --primary: #ff758f;
+            --primary-hover: #ff4d6d;
+            --text-main: #2b2d42;
+            --text-muted: #6c757d;
+            --accent: #ffccd5;
+        }
+
+        body {
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Hero Header */
+        header {
+            width: 100%;
+            text-align: center;
+            padding: 80px 20px 40px 20px;
+            background: linear-gradient(180deg, var(--accent) 0%, var(--bg-color) 100%);
+            box-sizing: border-box;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin: 0;
+            color: var(--primary-hover);
+            letter-spacing: -1px;
+        }
+
+        /* Countdown Widget */
+        .countdown-container {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 25px;
+        }
+
+        .countdown-box {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            min-width: 70px;
+            text-align: center;
+        }
+
+        .countdown-box span {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-hover);
+        }
+
+        .countdown-box label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin: 40px 0 20px 0;
+            background: #f0e6e6;
+            padding: 6px;
+            border-radius: 30px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text-muted);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 10px rgba(255, 117, 143, 0.3);
+        }
+
+        /* Main Content Wrapper */
+        .content-section {
+            display: none;
+            width: 90%;
+            max-width: 1000px;
+            margin-bottom: 60px;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* Gallery Grid (Tab 1) */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            height: 350px;
+            background: #eee;
+        }
+
+        .gallery-item img, .gallery-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 20px;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item:hover img, .gallery-item:hover video {
+            transform: scale(1.05);
+        }
+
+        /* Accordion Structure (Tab 2) */
+        .accordion-item {
+            background: var(--card-bg);
+            margin-bottom: 15px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            overflow: hidden;
+        }
+
+        .accordion-header {
+            padding: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            background: var(--card-bg);
+            user-select: none;
+        }
+
+        .accordion-header:hover {
+            background: #fff8f9;
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0 20px;
+            color: var(--text-muted);
+        }
+
+        /* Interactive Letter (Tab 3) */
+        .letter-box {
+            background: var(--card-bg);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            text-align: center;
+            border: 1px dashed var(--primary);
+        }
+
+        .letter-text {
+            font-family: 'Georgia', serif;
+            font-size: 1.2rem;
+            line-height: 2;
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+            display: none;
+        }
+
+        .letter-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255,117,143,0.4);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            header h1 { font-size: 2rem; }
+            .nav-tabs { flex-direction: column; width: 80%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 id="dynamic-greeting">Hey Beautiful ❤️</h1>
+        <p>Welcome to our little corner of the internet.</p>
+        
+        <div class="countdown-container">
+            <div class="countdown-box"><span id="days">00</span><label>Days</label></div>
+            <div class="countdown-box"><span id="hours">00</span><label>Hours</label></div>
+            <div class="countdown-box"><span id="minutes">00</span><label>Mins</label></div>
+            <div class="countdown-box"><span id="seconds">00</span><label>Secs</label></div>
+        </div>
+    </header>
+
+    <nav class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('gallery')">Our Moments 💖</button>
+        <button class="tab-btn" onclick="switchTab('reasons')">Why I Love You 💞</button>
+        <button class="tab-btn" onclick="switchTab('letter')">A Message For You 💌</button>
+    </nav>
+
+    <section id="gallery" class="content-section active">
+        <div class="gallery-grid">
+            
+            <div class="gallery-item">
+                <img src="IMG_0174.JPG" alt="Memory">
+                <div class="gallery-overlay">
+                    <h3>That Day Out</h3>
+                    <p>I couldn't take my eyes off you the whole evening 😍 - तुझे तक तक तक तकते रहना 😘</p>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <video autoplay loop muted playsinline>
+                    <source src="video_20260619_164314.mp4" type="video/mp4">
+                </video>
+                <div class="gallery-overlay">
+                    <h3>Pure Love 🥰</h3>
+                    <p>તને જોઈ મેં જ્યાર થી તારા સિવાય કશું જોવા ના માંગે મન</p>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img src="IMG_0321.JPG" alt="Memory">
+                <div class="gallery-overlay">
+                    <h3>The Proposal 👩‍❤️‍👨</h3>
+                    <p>सारी दुनिया से जीत के मैं आया हूँ इधर तेरे आगे ही मैं हारा किया तूने क्या असर</p>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <img src="IMG_0358.JPG" alt="Memory">
+                <div class="gallery-overlay">
+                    <h3>A Small Date 🥰</h3>
+                    <p>तू नज़्म नज़्म सा मेरे💖होंठो पे ठहर जा 💝 मैं ख्वाब ख्वाब सा तेरी🌹आँखों में जागूं रे💓</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="reasons" class="content-section">
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                1. Your Kind Heart <span>+</span>
+            </div>
+            <div class="accordion-content">
+                <p style="padding-bottom: 20px;">The way you take care of everyone around you and lift people up inspires me every day.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                2. Your Infectious Smile <span>+</span>
+            </div>
+            <div class="accordion-content">
+                <p style="padding-bottom: 20px;">No matter how tough my day at work is, seeing you smile instantly resets everything for me.</p>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                3. You Are My Safest Space <span>+</span>
+            </div>
+            <div class="accordion-content">
+                <p style="padding-bottom: 20px;">With you, I can completely be myself without any filters or fear. You feel like home.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="letter" class="content-section">
+        <div class="letter-box">
+            <div id="envelope-icon" style="font-size: 4rem; margin-bottom: 20px;">✉️</div>
+            <button id="open-btn" class="letter-btn" onclick="openLetter()">Open My Letter</button>
+            
+            <div id="letter-content" class="letter-text">
+                <p>Dearest Patni Jii 🥰,</p>
+                <p>Phool🌹tumhe🪻bheja hai khat 💌 me phool🌻🌻nahi mera dil 💝 hai</p>
+                <p>Building things with code 👨‍💻 is fun, computers 💻 are fun , but nothing matches 💓 the life 💞we are building together 💖. Thank you for being my teammate💖, my partner, and my love💗. I made this just to remind you how much you mean to me.</p>
+                <p>Ek chota sa token of Love 💝 from the Man👩‍❤️‍👨 who is obsessed with you 😍😘</p>
+                <p style="text-align: right; font-weight: bold;">Forever Yours ❤️</p>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // 1. COUNTDOWN TIMER CONFIGURATION
+        // Replace this date with your Target Date (e.g., Anniversary or Wedding Day)
+        const targetDate = new Date("Jan 29, 2027 18:00:00").getTime();
+
+        const timerInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = String(days).padStart(2, '0');
+            document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+            document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+            document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.querySelector(".countdown-container").innerHTML = "<h3>The Big Day is Here! 🎉</h3>";
+            }
+        }, 1000);
+
+        // 2. TAB SWITCHER LOGIC
+        function switchTab(tabId) {
+            // Remove active classes
+            document.querySelectorAll('.content-section').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+
+            // Add active classes to targeted element
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // 3. ACCORDION (WHY I LOVE YOU) LOGIC
+        function toggleAccordion(element) {
+            const content = element.nextElementSibling;
+            const icon = element.querySelector('span');
+            
+            if (content.style.maxHeight && content.style.maxHeight !== "0px") {
+                content.style.maxHeight = "0px";
+                icon.innerText = "+";
+            } else {
+                // Close others if open
+                document.querySelectorAll('.accordion-content').forEach(el => el.style.maxHeight = "0px");
+                document.querySelectorAll('.accordion-header span').forEach(el => el.innerText = "+");
+                
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.innerText = "−";
+            }
+        }
+
+        // 4. LOVE LETTER LOGIC
+        function openLetter() {
+            document.getElementById('envelope-icon').style.display = 'none';
+            document.getElementById('open-btn').style.display = 'none';
+            
+            const content = document.getElementById('letter-content');
+            content.style.display = 'block';
+            content.style.animation = 'fadeIn 1s ease forwards';
+        }
+
+        // Personalized touch based on local time greeting
+        const hr = new Date().getHours();
+        if (hr < 12) document.getElementById('dynamic-greeting').innerText = "Good Morning, Beautiful ❤️";
+        else if (hr < 17) document.getElementById('dynamic-greeting').innerText = "Hey Gorgeous ❤️";
+        else document.getElementById('dynamic-greeting').innerText = "Good Evening, My Love ❤️";
+    </script>
+</body>
+</html>
